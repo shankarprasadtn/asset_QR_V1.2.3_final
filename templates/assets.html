@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Asset Records</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background: #0f172a;
+      color: #e2e8f0;
+    }
+
+    .navbar {
+      background: #1e293b;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #334155;
+    }
+    .navbar a {
+      color: #e2e8f0;
+      margin-right: 15px;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    .navbar a:hover { color: #93c5fd; }
+
+    .container {
+      max-width: 1000px;
+      margin: 30px auto;
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    }
+
+    h1 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 1.3rem;
+      color: #93c5fd;
+    }
+
+    .summary {
+      font-size: 0.85rem;
+      color: #cbd5f5;
+      margin-bottom: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 0.85rem;
+    }
+    th, td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #334155;
+      text-align: left;
+    }
+    th {
+      background: #020617;
+      color: #cbd5f5;
+      font-weight: 600;
+    }
+    tr:nth-child(even) td { background: #020617; }
+    tr:nth-child(odd) td { background: #111827; }
+
+    .muted {
+      color: #94a3b8;
+      font-size: 0.8rem;
+    }
+    .no-data {
+      margin-top: 15px;
+      font-size: 0.9rem;
+      color: #e5e7eb;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Navigation Bar -->
+<div class="navbar">
+  <div>
+    <a href="{{ url_for('index') }}">Home</a>
+    <a href="{{ url_for('labels') }}">Labels</a>
+    <a href="{{ url_for('bulk_upload') }}">Bulk Upload</a>
+    <a href="{{ url_for('print_page') }}">Print Sheet</a>
+    <a href="{{ url_for('assets') }}">Assets</a>
+  </div>
+  <div>
+    <a href="{{ url_for('logout') }}">Logout</a>
+  </div>
+</div>
+
+<div class="container">
+  <h1>Asset Records</h1>
+  <div class="summary">
+    Total records: {{ items|length }}
+  </div>
+
+  {% if not items %}
+    <div class="no-data">
+      No records found in <code>asset_data.xlsx</code>. Generate some QR codes first.
+    </div>
+  {% else %}
+    <table>
+      <thead>
+        <tr>
+          <th>Timestamp</th>
+          <th>Asset Type</th>
+          <th>Serial</th>
+          <th>Location</th>
+          <th>Purchase Date</th>
+          <th>QR Content</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in items %}
+          <tr>
+            <td class="muted">{{ row.timestamp }}</td>
+            <td>{{ row.asset_type }}</td>
+            <td>{{ row.serial }}</td>
+            <td>{{ row.location }}</td>
+            <td>{{ row.purchase_date }}</td>
+            <td class="muted">{{ row.qr }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+</div>
+
+</body>
+</html>

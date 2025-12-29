@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Manage Users · Asset QR Tool</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      margin: 0; min-height: 100vh; background: #0f172a;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #e5e7eb; padding: 20px;
+    }
+    .container { max-width: 800px; margin: 0 auto; }
+    .card {
+      background: #020617; border-radius: 16px;
+      border: 1px solid rgba(148,163,184,0.25);
+      padding: 18px 20px 20px;
+      box-shadow: 0 18px 40px rgba(15,23,42,0.95), 0 0 0 1px rgba(15,23,42,1);
+      margin-bottom: 18px;
+    }
+    h1 {
+      font-size: 1.1rem; margin: 0 0 6px;
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .subtitle { font-size: 0.8rem; color: #9ca3af; margin-bottom: 12px; }
+    label {
+      display: block; font-size: 0.8rem; color: #9ca3af; margin-top: 6px;
+    }
+    input, select {
+      width: 100%; padding: 7px 9px; border-radius: 10px;
+      border: 1px solid rgba(148,163,184,0.45);
+      background: #020617; color: #e5e7eb; margin-top: 2px;
+    }
+    button {
+      margin-top: 10px; padding: 8px 12px; border-radius: 999px; border: none;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: white; font-size: 0.85rem; text-transform: uppercase;
+      letter-spacing: 0.05em; cursor: pointer;
+    }
+    .message { margin-top: 8px; font-size: 0.78rem; color: #22c55e; }
+    table {
+      width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.85rem;
+    }
+    th, td {
+      border-bottom: 1px solid #1f2937; padding: 6px 4px; text-align: left;
+    }
+    th { color: #9ca3af; font-weight: 500; }
+    .back-link { font-size: 0.8rem; margin-top: 10px; }
+    .back-link a { color: #93c5fd; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>Manage Users</h1>
+      <div class="subtitle">
+        Add or update user accounts and roles. Changes are stored locally in <code>users.json</code>.
+      </div>
+
+      <form method="POST">
+        <label for="username">Username</label>
+        <input id="username" name="username" required>
+
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" required>
+
+        <label for="role">Role</label>
+        <select id="role" name="role">
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+
+        <button type="submit">Save User</button>
+      </form>
+
+      {% if message %}
+        <div class="message">{{ message }}</div>
+      {% endif %}
+    </div>
+
+    <div class="card">
+      <h2 style="font-size:1rem; margin:0 0 6px;">Existing Users</h2>
+      <table>
+        <thead><tr><th>Username</th><th>Role</th></tr></thead>
+        <tbody>
+          {% for user in users %}
+            <tr><td>{{ user.username }}</td><td>{{ user.role }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div class="back-link">
+        <a href="{{ url_for('reset_password') }}">Reset a user password</a> ·
+        <a href="{{ url_for('index') }}">Back to Generator</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

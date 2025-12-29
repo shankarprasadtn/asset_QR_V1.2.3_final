@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Asset QR Labels</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    body { margin: 0; background: #0f172a; color: #e2e8f0; }
+
+    .navbar {
+      background: #1e293b;
+      padding: 12px 20px;
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid #334155;
+    }
+    .navbar a { color: #e2e8f0; margin-right: 15px; text-decoration: none; font-size: 0.9rem; }
+    .navbar a:hover { color: #93c5fd; }
+
+    .page { max-width: 1000px; margin: 30px auto; padding: 0 16px 24px; }
+
+    .top {
+      display:flex; justify-content:space-between; align-items:baseline;
+      flex-wrap:wrap; gap:10px; margin-bottom:16px;
+    }
+    .top h1 { margin:0; font-size:1.2rem; color:#93c5fd; }
+    .top small { font-size:0.8rem; color:#cbd5f5; }
+
+    .buttons { display:flex; gap:8px; flex-wrap:wrap; }
+    .btn {
+      border-radius:999px; border:1px solid #475569;
+      padding:6px 12px; font-size:0.85rem;
+      background:#0f172a; color:#e2e8f0; text-decoration:none; cursor:pointer;
+    }
+    .btn-primary { background:#3b82f6; border-color:#3b82f6; color:#f9fafb; }
+
+    .labels-grid {
+      margin-top:12px;
+      display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px;
+    }
+    .label-card {
+      border-radius:10px; border:1px solid #475569;
+      background:#020617; padding:10px; text-align:center; page-break-inside:avoid;
+    }
+    .label-card img {
+      max-width:100%; height:auto; image-rendering:pixelated;
+      background:#f9fafb; border-radius:6px; padding:4px;
+    }
+    .meta {
+      margin-top:6px; font-size:0.8rem; text-align:left; color:#cbd5f5;
+    }
+    .meta div { margin-top:3px; }
+    .rrdd { font-weight:700; }
+
+    .no-data { margin-top:16px; font-size:0.9rem; color:#e5e7eb; }
+
+    @media print {
+      body { background:#ffffff; }
+      .navbar, .top { display:none; }
+      .page { margin:0; padding:0; }
+      .label-card { border-color:#9ca3af; }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="navbar">
+  <div>
+    <a href="{{ url_for('index') }}">Home</a>
+    <a href="{{ url_for('labels') }}">Labels</a>
+    <a href="{{ url_for('bulk_upload') }}">Bulk Upload</a>
+    <a href="{{ url_for('print_sheet') }}">Print Sheet</a>
+    <a href="{{ url_for('assets') }}">Assets</a>
+  </div>
+  <div>
+    <a href="{{ url_for('logout') }}">Logout</a>
+  </div>
+</div>
+
+<div class="page">
+  <div class="top">
+    <div>
+      <h1>Asset QR Labels</h1>
+      <small>Use Ctrl+P to print · 4 per row</small>
+    </div>
+    <div class="buttons">
+      <button class="btn btn-primary" onclick="window.print()">🖨 Print Page</button>
+    </div>
+  </div>
+
+  {% if not items %}
+    <div class="no-data">No labels found. Generate some QR codes first.</div>
+  {% else %}
+    <div class="labels-grid">
+      {% for item in items %}
+        <div class="label-card">
+          <img src="{{ url_for('qr_image', filename=item.filename) }}" alt="QR {{ item.serial }}">
+          <div class="meta">
+            <div><strong>Asset Name:</strong> {{ item.asset_type }}</div>
+            <div><strong>Serial Number:</strong> {{ item.serial }}</div>
+            <div><strong>Location Code:</strong> {{ item.location }}</div>
+            <div class="rrdd"><strong>RRDD:</strong> {{ item.rrdd }}</div>
+            {% if item.purchase_date %}
+              <div><strong>Purchase Date:</strong> {{ item.purchase_date }}</div>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+
+</body>
+</html>

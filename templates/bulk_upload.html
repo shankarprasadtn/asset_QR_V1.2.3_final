@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Bulk QR Upload · Asset QR Tool</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      margin: 0; min-height: 100vh; background: #0f172a;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #e5e7eb; padding: 20px;
+    }
+    .card {
+      background: #020617; border-radius: 16px;
+      border: 1px solid rgba(148,163,184,0.25);
+      padding: 20px 22px 22px; max-width: 460px; margin: 0 auto;
+      box-shadow: 0 18px 40px rgba(15,23,42,0.95), 0 0 0 1px rgba(15,23,42,1);
+    }
+    h1 {
+      font-size: 1.05rem; margin: 0 0 6px;
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .subtitle { font-size: 0.8rem; color: #9ca3af; margin-bottom: 14px; }
+    label { font-size: 0.8rem; color: #9ca3af; display: block; margin-bottom: 4px; }
+    input[type="file"] { color: #e5e7eb; margin-bottom: 10px; }
+    button {
+      padding: 8px 12px; border-radius: 999px; border: none;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: white; font-size: 0.85rem; text-transform: uppercase;
+      letter-spacing: 0.05em; cursor: pointer; margin-top: 4px;
+    }
+    .msg { margin-top: 10px; font-size: 0.8rem; color: #22c55e; }
+    .back-link { margin-top: 12px; font-size: 0.8rem; }
+    .back-link a { color: #93c5fd; text-decoration: none; }
+    .hint { margin-top: 10px; font-size: 0.75rem; color: #9ca3af; }
+    .hint code {
+      background: rgba(15,23,42,0.9); padding: 2px 4px; border-radius: 4px;
+      border: 1px solid rgba(148,163,184,0.2); font-size: 0.7rem;
+    }
+    .hint ul {
+      margin: 6px 0 0 18px; padding: 0; font-size: 0.75rem;
+    }
+    .hint li { margin-bottom: 2px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Bulk QR Upload</h1>
+    <div class="subtitle">
+      Upload an Excel file (.xlsx) with serial numbers (and optional purchase dates)
+      to generate multiple QR codes in one go.
+    </div>
+
+    <form method="POST" enctype="multipart/form-data">
+      <label>Excel File (.xlsx)</label>
+      <input type="file" name="file" required>
+      <button type="submit">Generate QR Codes</button>
+    </form>
+
+    {% if message %}
+      <div class="msg">{{ message }}</div>
+    {% endif %}
+
+    <div class="hint">
+      <strong>Expected format (first sheet):</strong>
+      <ul>
+        <li>Row 1: Header (any text, will be skipped)</li>
+        <li>Row 2 onwards: data</li>
+      </ul>
+      <br>
+      <code>Column A</code> → Serial Number (mandatory)<br>
+      <code>Column B</code> → Purchase Date (optional, e.g. <code>2024-03-20</code> or <code>20-03-2024</code>)<br><br>
+      For each row, the app will use:<br>
+      <code>Assetname : Lenovo Laptop</code><br>
+      <code>Location Code: IN110 ITC CH</code><br>
+      <code>RRDD as &lt;Serial Number in Column A&gt;</code><br>
+      <code>Purchase Date: &lt;value from Column B&gt;</code> (if provided).
+    </div>
+
+    <div class="back-link">
+      <a href="{{ url_for('index') }}">← Back to Generator</a>
+    </div>
+  </div>
+</body>
+</html>
