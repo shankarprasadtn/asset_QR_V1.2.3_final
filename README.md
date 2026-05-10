@@ -144,14 +144,12 @@ The application supports exporting:
 
 ---
 
-## Screenshots
+## Architecture Diagram
 
-Add screenshots inside a `screenshots/` folder and update this section.
+<img width="1024" height="1536" alt="43180cf3-dfd8-49d1-b48c-a83b8ba054e8" src="https://github.com/user-attachments/assets/694d7a10-a6e0-4240-92b2-9d243ef67faa" />
 
-Example:
 
-```markdown
-![Dashboard](screenshots/dashboard.png)
+
 ```
 
 ---
